@@ -9,6 +9,7 @@ A ideia surgiu de uma extensão do ambiente de Desktop Gnome em Linux. Este proj
 
 #### Alterações futuras previstas:
 
+- Correções dos bugs atuais;
 - Implementação de biblioteca BASSHLS atualizada em x64 e compilação de aplicativo em x64;
 - Utilização de atalhos de mídia;
 - Criação de pacote c/instalador;
