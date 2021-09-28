@@ -21,6 +21,10 @@ A ideia surgiu de uma extensão do ambiente de Desktop Gnome em Linux. Este proj
 
 Nota: No momento, não está contemplada a implementação da busca por rádios diretamente pelo aplicativo.
 
+### Screenshot:
+
+![PinPlay](pics/screenshot.png)
+
 #### Agradecimentos:
 
 - hslbck - Pela ideia da rádio de internet na barra de tarefas - https://github.com/hslbck/gnome-shell-extension-radio
