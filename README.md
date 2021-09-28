@@ -27,10 +27,10 @@ Nota: No momento, não está contemplada a implementação da busca por rádios 
 #### Agradecimentos:
 
 - hslbck - Pela ideia da rádio de internet na barra de tarefas - https://github.com/hslbck/gnome-shell-extension-radio
-- trancexx - Pela criação do LiveStreaming.au3 - https://www.autoitscript.com/forum/topic/123360-live-streaming/
-- wakillon - Pela criação da biblioteca Bass.au3 e BassConstants.au3 - https://www.autoitscript.com/forum/topic/186202-basshls-example-for-play%C2%A0http-live-streaming-streams/
-- Melba23 - Pela criação da biblioteca GUIListViewEx.au3 - https://www.autoitscript.com/forum/topic/182492-guilistviewex-new-version-13-sep-21/
-- guinness - Pela criação da biblioteca _GUICtrlListView_SaveTxt.au3 - https://www.autoitscript.com/forum/topic/129251-_guictrllistview_savetxt-exports-the-details-of-a-listview-to-a-txt-file/
+- trancexx - Pelo LiveStreaming.au3 - https://www.autoitscript.com/forum/topic/123360-live-streaming/
+- wakillon - Pelas bibliotecas Bass.au3 e BassConstants.au3 - https://www.autoitscript.com/forum/topic/186202-basshls-example-for-play%C2%A0http-live-streaming-streams/
+- Melba23 - Pela biblioteca GUIListViewEx.au3 - https://www.autoitscript.com/forum/topic/182492-guilistviewex-new-version-13-sep-21/
+- guinness - Pela biblioteca _GUICtrlListView_SaveTxt.au3 - https://www.autoitscript.com/forum/topic/129251-_guictrllistview_savetxt-exports-the-details-of-a-listview-to-a-txt-file/
 
 #### Changelog:
 
