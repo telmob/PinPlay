@@ -21,6 +21,14 @@ A ideia surgiu de uma extensão do ambiente de Desktop Gnome em Linux. Este proj
 
 Nota: No momento, não está contemplada a implementação da busca por rádios diretamente pelo aplicativo.
 
+#### Agradecimentos:
+
+- hslbck - Pela ideia da rádio de internet na barra de tarefas - https://github.com/hslbck/gnome-shell-extension-radio
+- trancexx - Pela criação do LiveStreaming.au3 - https://www.autoitscript.com/forum/topic/123360-live-streaming/
+- wakillon - Pela criação da biblioteca Bass.au3 e BassConstants.au3 - https://www.autoitscript.com/forum/topic/186202-basshls-example-for-play%C2%A0http-live-streaming-streams/
+- Melba23 - Pela criação da biblioteca GUIListViewEx.au3 - https://www.autoitscript.com/forum/topic/182492-guilistviewex-new-version-13-sep-21/
+- guinness - Pela criação da biblioteca _GUICtrlListView_SaveTxt.au3 - https://www.autoitscript.com/forum/topic/129251-_guictrllistview_savetxt-exports-the-details-of-a-listview-to-a-txt-file/
+
 #### Changelog:
 
 v.1.0.1:
@@ -49,11 +57,3 @@ Bugs:
 
 É necessário fechar e abrir aplicativo na troca de fonte de audio fone/altofalante.
 Código de caracteres Unicode não implementado totalmente.
-
-#### Agradecimentos:
-
-- hslbck - Pela ideia da rádio de internet na barra de tarefas - https://github.com/hslbck/gnome-shell-extension-radio
-- trancexx - Pela criação do LiveStreaming.au3 - https://www.autoitscript.com/forum/topic/123360-live-streaming/
-- wakillon - Pela criação da biblioteca Bass.au3 e BassConstants.au3 - https://www.autoitscript.com/forum/topic/186202-basshls-example-for-play%C2%A0http-live-streaming-streams/
-- Melba23 - Pela criação da biblioteca GUIListViewEx.au3 - https://www.autoitscript.com/forum/topic/182492-guilistviewex-new-version-13-sep-21/
-- guinness - Pela criação da biblioteca _GUICtrlListView_SaveTxt.au3 - https://www.autoitscript.com/forum/topic/129251-_guictrllistview_savetxt-exports-the-details-of-a-listview-to-a-txt-file/
