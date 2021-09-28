@@ -20,7 +20,7 @@ A ideia surgiu de uma extensão do ambiente de desktop Gnome em Linux. Este proj
 
 Nota: No momento, não está contemplada a implementação da busca por rádios diretamente pelo aplicativo.
 
-### Screenshot:
+#### Screenshot:
 
 ![PinPlay](pics/screenshot.png)
 
