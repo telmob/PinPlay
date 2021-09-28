@@ -1,5 +1,4 @@
-# PinPlay
-PinPlay  - Rádio de Internet
+# PinPlay  - Rádio de Internet
 
 PinPlay é um pequeno aplicativo que permite tocar rádios de internet a partir de um ícone da bandeja de sistema do Windows.
 
