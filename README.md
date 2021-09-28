@@ -5,6 +5,8 @@ PinPlay é um pequeno aplicativo que permite tocar rádios de internet a partir 
 
 A ideia surgiu de uma extensão do ambiente de Desktop Gnome em Linux. Este projeto é uma transição dessa extensão. A extensão original, pode ser encontrada em: https://github.com/hslbck/gnome-shell-extension-radio
 
+#### Compatibilidade: Windows 10; Windows 11.
+
 #### Alterações futuras previstas:
 
 - Implementação de biblioteca BASSHLS atualizada em x64 e compilação de aplicativo em x64;
