@@ -3,34 +3,18 @@
 #AutoIt3Wrapper_Outfile=PinPlay.Exe
 #AutoIt3Wrapper_UseX64=n
 #AutoIt3Wrapper_Res_Description=PinPlay Rádio de Internet
-#AutoIt3Wrapper_Res_Fileversion=1.0.1
+#AutoIt3Wrapper_Res_Fileversion=1.1.0
 #AutoIt3Wrapper_Res_ProductName=PinPlay
 #AutoIt3Wrapper_Res_LegalCopyright=Telmo Baía 2021
 #AutoIt3Wrapper_Res_Language=1046
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
-#Include <Constants.au3>
-#include <TrayConstants.au3>
-#include <GUIConstantsEx.au3>
-#include <WindowsConstants.au3>
-#include <AutoItConstants.au3>
-#include <StaticConstants.au3>
-#include <UpDownConstants.au3>
-#include <EditConstants.au3>
-#include <ButtonConstants.au3>
-#include "_GUICtrlListView_SaveTxt.au3"
-#include <File.au3>
-#include <Misc.au3>
-#include <String.au3>
-#include <Array.au3>
-#include "GUIListViewEx.au3"
-#include <Bass.au3>
+
 
 #CS
 
 Alterações futuras previstas:
 
 Implementação de biblioteca BASSHLS atualizada em x64 e compilação de aplicativo em x64;
-Utilização de atalhos de mídia;
 Criação de pacote c/instalador;
 Distribuição de PinPlay em modo portátil e c/instalador;
 Opção de tocar ao iniciar aplicativo;
@@ -41,6 +25,14 @@ Atualização automática de versão.
 Nota: No momento, não está contemplada a implementação da busca por rádios diretamente pelo aplicativo.
 
 Changelog:
+
+v.1.1
+Implementação de tecla de atalho Play/Pause, com opção de Gancho Virtual para atribuir exclusividade de uso da tecla ao PinPlay.
+
+Bugs:
+
+Ainda é necessário parar e iniciar o PinPlay (Click mouse esquerdo no ícone do tray) na troca de fonte de audio fone/altofalante.
+Código de caracteres Unicode não implementado totalmente.
 
 v.1.0.1
 Pequenas correções estéticas.
@@ -75,6 +67,25 @@ Melba23 - Pela criação da biblioteca GUIListViewEx.au3 - https://www.autoitscrip
 guinness - Pela criação da biblioteca _GUICtrlListView_SaveTxt.au3 - https://www.autoitscript.com/forum/topic/129251-_guictrllistview_savetxt-exports-the-details-of-a-listview-to-a-txt-file/
 
 #CE
+
+
+#Include <Constants.au3>
+#include <TrayConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <WindowsConstants.au3>
+#include <AutoItConstants.au3>
+#include <StaticConstants.au3>
+#include <UpDownConstants.au3>
+#include <EditConstants.au3>
+#include <ButtonConstants.au3>
+#include "_GUICtrlListView_SaveTxt.au3"
+#include <WinAPI.au3>
+#include <File.au3>
+#include <Misc.au3>
+#include <String.au3>
+#include <Array.au3>
+#include "GUIListViewEx.au3"
+#include <Bass.au3>
 
 Opt("TrayMenuMode", 3)
 Opt("TrayOnEventMode",1)
@@ -131,12 +142,18 @@ EndIf
 
 Global $hStream, $sStreamUrl, $sBuffer, $idButtonPlay, $idButtonStop, $_Pause, $Hls, $Aac, $_ghBassHlsDll, $iError
 
+;DEFINIR ATALHO DE MÍDIA PARA PLAY/PAUSE
+HotKeySet("{MEDIA_PLAY_PAUSE}", "_LeftClick")
+Global $Hook, $Stub
+
+;==> ATALHO PLAY/PAUSE
+
 Basshlsdll ( 'basshls.dll', @TempDir, 1 ) ; v2.4beta updated 18 Oct 2016
 Bass_Aacdll ( 'bass_aac.dll', @TempDir, 1 ) ; v2.4.51
 Bassdll ( 'Bass.dll', @TempDir, 1 ) ; v2.4.11
 _BASS_Startup ( @TempDir & '\Bass.dll' )
 _BASS_Init ( 0, -1, 44100, 0, '' )
-If @error Then Exit MsgBox ( 0, 'Error', 'Could not initialize audio' )
+If @error Then Exit MsgBox ( 0, 'Erro', 'Não foi possível inicializar o audio.' )
 $Aac = _BASS_PluginLoad ( @TempDir & '\bass_aac.dll' )
 $Hls = _BASS_PluginLoad ( @TempDir & '\basshls.dll' )
 $_ghBassHlsDll = DllOpen ( @TempDir & '\basshls.dll' )
@@ -329,7 +346,6 @@ Func _LzntDecompress ( $bBinary ); by trancexx
     Return SetError ( 0, 0, DllStructGetData ( $tOutput, 1 ) )
 EndFunc ;==> _LzntDecompress()
 
-
 Global $sRet
 
 $hGUI = GUICreate("PinPlay", 571, 270, -1, -1, -1, $WS_EX_WINDOWEDGE)
@@ -341,6 +357,11 @@ GUICtrlSetColor(-1, 0x0066CC)
 GUICtrlCreateLabel(" - ", 100, 248, 10, 18)
 $LabelRadioHelp = GUICtrlCreateLabel("Ajuda?", 115, 248, 91, 18)
 GUICtrlSetColor(-1, 0x0066CC)
+$CheckboxHook = GUICtrlCreateCheckbox("Gancho para Play/Pause", 292, 248, 135, 17)
+$LabelQuestion = GUICtrlCreateLabel("?", 433, 248, 12, 20)
+GUICtrlSetFont(-1, 11, 800, 0, "MS Sans Serif")
+GUICtrlSetColor(-1, 0xFF0000)
+GUICtrlSetTip(-1, "Força exclusividade da tecla de" & @CRLF & "mídia 'Play/Pause' ao PinPlay." & @CRLF & @CRLF & "Proíbe outros aplicativos de" & @CRLF & "usar esta tecla.", "Gancho Virtual", 2, 1)
 
 
 ; Create ListView
@@ -361,6 +382,11 @@ If FileExists($iniFile) Then
 			_GUICtrlListView_AddSubItem($cLV_1, $i - 1, $varRADIO[$i][1], 1, $i)
 		Next
 	EndIf
+EndIf
+If IniRead($iniFile, "PLAYING", "Gancho", "") = "1" Then
+	GUICtrlSetState($CheckboxHook, $GUI_CHECKED)
+Else
+	GUICtrlSetState($CheckboxHook, $GUI_UNCHECKED)
 EndIf
 
 $iLVIndex_1 = _GUIListViewEx_Init($cLV_1, 0, 1) ; + 16 ; And you just use an empty string when intialising the ListView <<<<<<<<<<
@@ -401,6 +427,11 @@ While 1
 			IniWrite($iniFile, "PLAYING", "controlID", $Ini1)
 			IniWrite($iniFile, "PLAYING", "URL", $Ini2)
 			IniWrite($iniFile, "PLAYING", "Radio", $Ini3)
+			If GUICtrlRead($CheckboxHook) = $GUI_CHECKED Then
+				IniWrite($iniFile, "PLAYING", "Gancho", "1")
+			Else
+				IniWrite($iniFile, "PLAYING", "Gancho", "0")
+			EndIf
 			ReloadTray()
 
         Case $cUp
@@ -486,6 +517,14 @@ Func _addToTable()
 EndFunc
 
 Func _LeftClick()
+; VERIFICA SE FOI ALTERADO A SITUAÇÃO DO GANCHO. SE O GANCHO ESTIVER SETADO, ATIVA O GANCHO, SENÃO, REMOVE O GANCHO DO SISTEMA
+If IniRead($iniFile, "PLAYING", "Gancho", "") = "1" Then
+	$Stub = DllCallbackRegister("KeyProc", "int", "int;ptr;ptr")
+	$Hook = _WinAPI_SetWindowsHookEx($WH_KEYBOARD_LL, DllCallbackGetPtr($Stub), _WinAPI_GetModuleHandle(0), 0)
+Else
+	DllCallbackFree($Stub)
+    _WinAPI_UnhookWindowsHookEx($Hook)
+EndIf
 ; LIMPA TUDO ANTES DE INICIAR O AUDIO - CORRIGE PROBLEMAS AO ALTERNAR ENTRE FONTE DE SOM (FONES DE OUVIDO / ALTOFALANTES)
 _BASS_ChannelStop ( $hStream )
 _BASS_StreamFree ( $hStream )
@@ -496,13 +535,13 @@ DllClose ( $_ghBassHlsDll )
 FileDelete ( @TempDir & '\basshls.dll' )
 FileDelete ( @TempDir & '\bass_aac.dll' )
 FileDelete ( @TempDir & '\bass.dll' )
-;REINICIA A BIBLIOTECA BASS
+; REINICIA A BIBLIOTECA BASS
 Basshlsdll ( 'basshls.dll', @TempDir, 1 ) ; v2.4beta updated 18 Oct 2016
 Bass_Aacdll ( 'bass_aac.dll', @TempDir, 1 ) ; v2.4.51
 Bassdll ( 'Bass.dll', @TempDir, 1 ) ; v2.4.11
 _BASS_Startup ( @TempDir & '\Bass.dll' )
 _BASS_Init ( 0, -1, 44100, 0, '' )
-If @error Then Exit MsgBox ( 0, 'Error', 'Could not initialize audio' )
+If @error Then Exit MsgBox ( 0, 'Erro', 'Não foi possível inicializar o audio' )
 $Aac = _BASS_PluginLoad ( @TempDir & '\bass_aac.dll' )
 $Hls = _BASS_PluginLoad ( @TempDir & '\basshls.dll' )
 $_ghBassHlsDll = DllOpen ( @TempDir & '\basshls.dll' )
@@ -560,6 +599,9 @@ If $sect="Sair" Then
 	FileDelete ( @TempDir & '\basshls.dll' )
 	FileDelete ( @TempDir & '\bass_aac.dll' )
 	FileDelete ( @TempDir & '\bass.dll' )
+	; TIRA O GANCHO DA TECLA PLAY/PAUSE
+	DllCallbackFree($Stub)
+    _WinAPI_UnhookWindowsHookEx($Hook)
 	Exit
 EndIf
 If $sect="Editar Rádios" Then GUISetState(@SW_SHOW)
@@ -644,3 +686,26 @@ Func ReloadTray()
 	EndIf
 	If FileExists(@StartupDir &"\PinPlay.lnk") Then TrayItemSetState($TrayStartBoot, $TRAY_CHECKED) ; O loop anterior limpou todos os 'Checks' do Tray menu, é necessário verificar se existe o atalho para inicio automático no boot.
 EndFunc
+
+Func OnAutoITExit()
+    DllCallbackFree($Stub)
+    _WinAPI_UnhookWindowsHookEx($Hook)
+EndFunc  ;==>OnAutoITExit
+
+Func KeyProc($nCode, $wParam, $lParam)
+    If $nCode < 0 Then Return _WinAPI_CallNextHookEx($Hook, $nCode, $wParam, $lParam)
+    Local $KBDLLHOOK = DllStructCreate("dword vkCode;dword scanCode;dword flags;dword time;ptr dwExtraInfo", $lParam)
+    Local $Code = DllStructGetData($KBDLLHOOK, "vkCode")
+    Switch $wParam
+        Case $WM_KEYDOWN, $WM_SYSKEYDOWN
+            If $Code = 0xB3 Then   ;Tecla de mídia Play/Pause
+				_LeftClick()
+                Return -1
+            EndIf
+    EndSwitch
+    Return _WinAPI_CallNextHookEx($Hook, $nCode, $wParam, $lParam)
+EndFunc  ;==>KeyProc
+
+Func _keybd_event($Code, $Flag)
+    DllCall('user32.dll', 'int', 'keybd_event', 'int', $Code, 'int', 0, 'int', $Flag, 'ptr', 0)
+EndFunc;
