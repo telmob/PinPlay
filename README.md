@@ -10,7 +10,6 @@ A ideia surgiu de uma extensão do ambiente de desktop Gnome em Linux. Este proj
 
 - Correções dos bugs atuais;
 - Implementação de biblioteca BASSHLS atualizada em x64 e compilação de aplicativo em x64;
-- Utilização de atalhos de mídia;
 - Criação de pacote c/instalador;
 - Distribuição de PinPlay em modo portátil e c/instalador;
 - Opção de tocar ao iniciar aplicativo;
@@ -33,6 +32,14 @@ Nota: No momento, não está contemplada a implementação da busca por rádios 
 - guinness - Pela biblioteca _GUICtrlListView_SaveTxt.au3 - https://www.autoitscript.com/forum/topic/129251-_guictrllistview_savetxt-exports-the-details-of-a-listview-to-a-txt-file/
 
 #### Changelog:
+
+v.1.1.0
+Implementação de tecla de atalho Play/Pause, com opção de Gancho Virtual para atribuir exclusividade de uso da tecla ao PinPlay.
+
+Bugs:
+
+Ainda é necessário parar e iniciar o PinPlay (Click mouse esquerdo no ícone do tray) na troca de fonte de audio fone/altofalante.
+Código de caracteres Unicode não implementado totalmente.
 
 v.1.0.1:
 
